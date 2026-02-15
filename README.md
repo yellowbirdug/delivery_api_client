@@ -206,14 +206,51 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
+### Request Cancellation 
+
+#### Parameters
+
+| Parameter  | Type   | Status   | Description                                                                                                                               |
+| :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| action     | string | REQUIRED | cancelRequest                                                                                                                     |
+| privateKey | string | REQUIRED | Basic authentication Key obtained from the dashboard credentials inserted in the Header i.e.<br/>`Authorization: 'Bearer ' + privateKey ` |
+| requestID  | string | REQUIRED | Hash Id of the request                                                                                                                    |
+
+```js
+let config = {
+    headers: {
+        Authorization: 'Bearer ' + privateKey
+    }
+}
+
+let data = {
+    "action": "cancelRequest",
+    "requestID": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
+    "comment" : "Client changed his mind"
+}
+axios.post('https://logistic.groupngs.com/api/', data, config)
+.then(...)
+.catch(...)
+```
+
 #### Sample Response
 
 ```json
 {
-  "requestID": "38fa6ce0525cb7db8...0183cc2f5ca73",
-  "status": "PENDING"
+    "action": "cancelRequest",
+    "message": "Status updated successfully",
+    "oldStatus": "DRAFT",
+    "status": "CLIENT_CANCELED_ACCEPTED_REQUEST",
+    "requestId": "2026-02-15T23-25-53-169Z-MoMo-Marketplce-@-1652355187233-790",
+    "requestID": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
+    "requestIdHash": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
+    "updateDateTimeMillis": 1771198055564,
+    "updateDateTimeEAT": "2/15/2026, 11:27:35 PM"
 }
 ```
+Please note the request can only be cancelled via this api if the Item has been picked up yet. Otherwise, the cancellation will be performed upon request by YellowBIRD
+
+
 
 #### Sample Request Statuses
 
@@ -255,6 +292,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | USER_CANCELED_STARTED_TRIP       | USER CANCELED STARTED TRIP       |
 | DRIVER_CANCELED_STARTED_TRIP     | DRIVER CANCELED STARTED TRIP     |
 | REQUEST_DELETED_BY_DRIVER        | REQUEST DELETED BY DRIVER        |
+| CLIENT_CANCELED_ACCEPTED_REQUEST | REQUEST CANCELLED BY CLIENT VIA API|
 
 ##### Others
 
