@@ -320,7 +320,7 @@ let config = {
 
 let data = {
     "action": "cancelRequest",
-    "requestID": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
+    "requestID": "arUVHjbkPJamkKlMuplSny/...pU=",
     "comment" : "Client changed his mind"
 }
 axios.post('https://logistic.groupngs.com/api/', data, config)
@@ -336,7 +336,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
     "message": "Status updated successfully",
     "oldStatus": "DRAFT",
     "status": "CLIENT_CANCELED_ACCEPTED_REQUEST",
-    "requestId": "2026-02-15T23-25-53-169Z-MoMo-Marketplce-@-1652355187233-790",
+    "requestId": "2026-02-15T23-25-53-169Z-...1652355187233-790",
     "requestID": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
     "requestIdHash": "arUVHjbkPJamkKlMuplSny/0dkrQMRreMLZgeP4fEpU=",
     "updateDateTimeMillis": 1771198055564,
