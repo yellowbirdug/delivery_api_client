@@ -1,6 +1,6 @@
 # YellowBIRD Delivery API
 
-Before using the API, [sign up](https://logistic.groupngs.com) to obtain an API Key (Private Key). The Private Key is used for authorization.
+Before using the API, [sign up](https://logistics.groupngs.com) to obtain an API Key (Private Key). The Private Key is used for authorization.
 
 ## Authentication
 
@@ -13,7 +13,7 @@ Authorization: Bearer <privateKey>
 **API endpoint used in the examples:**
 
 ```text
-https://logistic.groupngs.com/api/
+https://logistics.groupngs.com/api/
 ```
 
 ## Table of Contents
@@ -22,13 +22,13 @@ https://logistic.groupngs.com/api/
 - [Usage](#usage)
 - [1. Price Estimation](#1-price-estimation)
   - [1.1 Parameters](#11-parameters)
-  - [1.2 Sample Request](#12-sample-request)
-  - [1.3 Sample Response](#13-sample-response)
+  - [1.2 Sample Price Estimation](#12-sample-request)
+  - [1.3 Sample Response (Price Estimation)](#13-sample-response)
 - [2. Delivery Request](#2-delivery-request)
   - [2.1 Parameters](#21-parameters)
   - [2.2 Sample Delivery Request (Distance Range)](#22-sample-delivery-request-distance-range)
-    - [2.2.1 Request](#221-request)
-    - [2.2.2 Response](#222-response)
+    - [2.2.1 Post Request](#221-request)
+    - [2.2.2 Sample Response](#222-response)
 - [3. Nearest Driver Distance](#3-nearest-driver-distance)
   - [3.1 Parameters](#31-parameters)
   - [3.2 Sample Response](#32-sample-response)
@@ -64,7 +64,7 @@ The following examples show how to consume different API actions
 | vehicleType | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK` |
 | origin      | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
 | destination | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
-### 1.2 Sample Request
+### 1.2 Sample Request (Price estimation)
 ```js
 let config = {
     headers: {
@@ -102,20 +102,33 @@ let data = {
         "itemQuantity" : 2
     }]
 }
-axios.post('https://logistic.groupngs.com/api/', data, config)
+axios.post('https://logistics.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
 
-### 1.3 Sample Response
+### 1.3 Sample Response (Price estimation)
 
 ```json
 {
-  "estimatedDistance": 6.290088835583491,
-  "estimatedDuration": 29.21120981731499,
-  "currency": "UGX",
-  "estimatedFee": 8155.734773947344,
-  "message": "OK"
+    "env": "UAT",
+    "orderId": "123455",
+    "companyName": "Moja Express",
+    "logisticsPricingLabel": "Distance Based Pricing",
+    "estimatedDistance": 0.7995489128928784,
+    "estimatedDuration": 4.330889944836425,
+    "currency": "UGX",
+    "countryCode": "UG",
+    "zoneLabel": "undefined",
+    "deliveryOption": "STANDARD",
+    "totalWeighInKg": 4.800000000000001,
+    "volumetricWeight": 16672.434,
+    "totalPackageAmount": 6356000,
+    "totalPackageQuantity": 2,
+    "minimumFare": 2500,
+    "estimatedFare": 2500,
+    "estimatedFee": 2500,
+    "message": "OK"
 }
 ```
 
@@ -135,7 +148,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | dropOffContactInfo   | object | REQUIRED | Details of the receiver i.e.<br/>`{fullName: String (REQUIRED), phoneNumber: String (REQUIRED), email: String (OPTIONAL), gender: String (OPTIONAL), description: String (OPTIONAL), addressLatLng: Array (REQUIRED) i.e. [lat, long], addressLabel: String (REQUIRED), city: String (OPTIONAL), building: String (OPTIONAL), plotNumber: String (OPTIONAL)}` |
 | paymentMode          | string | REQUIRED | Mode of payment, see Payment Modes for details                                                                                                                                                                                                                                                                                                               |
 
-### 2.2 Sample Delivery Request (Distance Range)
+### 2.2 Sample Request (Delivery Request)
 #### 2.2.1 Request
 ```json
 {
@@ -178,7 +191,25 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
         "itemDescription": "Crafted from the four corners of Scotland, it crackles with spice and is bursting with vibrant, smoky flavours – followed by a mellow bed of vanilla, a fresh zestiness and the Johnnie Walker signature of a long, lingering, smoky finish.",
         "itemColor": null,
         "itemImageUrl": "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbXdGIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9d3b5390a7b89263e2caec17eda0706bfbc24b26/JW%20Red%20250ml.png",
-        "itemQuantity": 2
+        "itemQuantity": 2,
+        "handlingRequirements": {
+            "fragile": false,
+            "hazardous": false,
+            "medicalItem": false,
+            "prescriptionRequired": false,
+            "specialPackagingRequired": false,
+            "uprightPositionRequired": false,
+            "refrigerationRequired": false,    
+            "ageRestriction": 18,
+            "temperatureRange": { 
+                "min": 5,
+                "max": 30
+            },
+            "fragilityLevel": "None",  // Options: None, Low, Medium, High
+            "isLightSensitive": false,
+            "isWaterSensitive": true,
+            "handlingInstructions": "Maintain temperature between 5°C and 30°C to ensure product quality."
+        },
     },
     "packagesMultiple" : [{
         "packageWeightKg": 1.0,
@@ -213,9 +244,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-#### 2.2.2 Response
-```json
-{
+#### 2.2.2 Sample Response (Delivery Request)
+```js
+  {
     "env": "UAT",
     "logisticsPricingLabel": "Distance Based Pricing",
     "estimatedDistance": 1.8169571553861763,
@@ -264,7 +295,7 @@ let data = {
     "vehicleType": "DELIVERY_CAB",
     "position": "[0.315133, 32.576353]"
 }
-axios.post('https://logistic.groupngs.com/api/', data, config)
+axios.post('https://logistics.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
@@ -298,7 +329,7 @@ let data = {
     "action": "requestStatus",
     "requestID": "7638bae085e...1f24cf80edff1213"
 }
-axios.post('https://logistic.groupngs.com/api/', data, config)
+axios.post('https://logistics.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
@@ -376,7 +407,7 @@ let data = {
     "action": "driverLocation",
     "requestID": "7638bae085e...1f24cf80edff1213"
 }
-axios.post('https://logistic.groupngs.com/api/', data, config)
+axios.post('https://logistics.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
@@ -418,7 +449,7 @@ let data = {
     "requestID": "arUVHjbkPJamkKlMuplSny/...pU=",
     "comment" : "Client changed his mind"
 }
-axios.post('https://logistic.groupngs.com/api/', data, config)
+axios.post('https://logistics.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
