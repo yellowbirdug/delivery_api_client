@@ -179,17 +179,33 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
     "returnItemReason":null,
     "returnOriginalRequestIdHash":null,
     "orderPlacedDateTimeMills":"12345678"
+}
 ```
 
-##### Sample Response Zone
+##### Sample Response Range
 ```json
 {
-  "estimatedDistance": 6.290088835583491,
-  "estimatedDuration": 29.21120981731499,
-  "estimatedFee": 8155.734773947344,
-  "requestID": "38fa6ce0525cb...3be0183cc2f5ca73",
-  "currency": "UGX",
-  "message": "Delivery request sent"
+    "env": "UAT",
+    "logisticsPricingLabel": "Distance Based Pricing intouch",
+    "estimatedDistance": 1.8169571553861763,
+    "estimatedDuration": 9.841851258341787,
+    "estimatedFare": 3000,
+    "estimatedFee": 3000,
+    "currency": "UGX",
+    "zoneLabel": "",
+    "deliveryOption": "STANDARD",
+    "totalWeighInKg": 4.4,
+    "volumetricWeight": 0,
+    "feeWithVolumetricWeight": 0,
+    "totalPackageAmount": 68800,
+    "totalPackageQuantity": 2,
+    "minimumFare": 2500,
+    "requestID": "YiwRKNWwjc1Cj469A6pkfkHH7bINL22E9KLEIwU_xKo",
+    "requestIdHash": "YiwRKNWwjc1Cj469A6pkfkHH7bINL22E9KLEIwU_xKo",
+    "orderId": "U1234",
+    "countryCode": "UG",
+    "returnDelivery": false,
+    "message": "Ok"
 }
 ```
 
