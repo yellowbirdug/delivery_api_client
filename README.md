@@ -6,13 +6,13 @@ Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (
 
 The following examples show how to consume different api actions
 
-### Delivery Request
+## Delivery Request
 
-#### Parameters
+### 1. Parameters
 
 | Parameter            | Type   | Status   | Description                                                                                                                                                                                                                                                                                                                                                   |
 | :------------------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| action               | string | REQUIRED | directRequestDelivery                                                                                                                                                                                                                                                                                                                                         |
+| action               | string | REQUIRED | directRequestDelivery  | directRequestDeliveryRange                                                                                                                                                                                                                                                                                                                                       |
 | privateKey           | string | REQUIRED | Basic authentication Key obtained from the dashboard credentials inserted in the Header i.e.<br/>`Authorization: 'Bearer ' + privateKey `                                                                                                                                                                                                                     |
 | countryCode          | string | REQUIRED | Country code Name i.e `UG, KE, TZ` etc                                                                                                                                                                                                                                                                                                                        |
 | vehicleType          | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK`                                                                                                                   |
@@ -23,7 +23,7 @@ The following examples show how to consume different api actions
 | dropOffContactInfo   | object | REQUIRED | Details of the receiver i.e.<br/>`{fullName: String (REQUIRED), phoneNumber: String (REQUIRED), email: String (OPTIONAL), gender: String (OPTIONAL), description: String (OPTIONAL), addressLatLng: Array (REQUIRED) i.e. [lat, long], addressLabel: String (REQUIRED), city: String (OPTIONAL), building: String (OPTIONAL), plotNumber: String (OPTIONAL)}` |
 | paymentMode          | string | REQUIRED | Mode of payment , see Payment Modes for details                                                                                                                                                                                                                                                                                                               |
 
-#### Payement Modes
+### 2. Payement Modes
 
 | Mode                        | Description                 |
 | :-------------------------- | :-------------------------- |
@@ -41,6 +41,10 @@ The following examples show how to consume different api actions
 | POSTPAID_E_COMMERCE_PARTNER | POSTPAID E COMMERCE PARTNER |
 | PREPAID_E_COMMERCE_PARTNER  | PREPAID E COMMERCE PARTNER  |
 
+### 3. Sample delivery Request
+#### 3.1 Sample delivery Request Zone
+
+##### Post Request
 ```js
 let config = {
     headers: {
@@ -54,10 +58,10 @@ let data = {
     "vehicleType": "DELIVERY_CAB",
     "paymentMode": "CASH",
     "pickupContactInfo": {
-        "fullName": "Wafula Abdalah",
+        "fullName": "Isaac Stores",
         "phoneNumber": "77900000",
         "countryCode": "+256",
-        "email": "abdalah.wafula@yellowbird.mobi",
+        "email": "isaacopiow@email.com",
         "gender": "",
         "description": "String (OPTIONAL)",
         "addressLatLng": "[0.29, 32.62]",
@@ -67,7 +71,7 @@ let data = {
         "plotNumber": "String (OPTIONAL)"
     },
     "dropOffContactInfo": {
-        "fullName": "Nono",
+        "fullName": "Philip Akol",
         "phoneNumber": "77900000",
         "countryCode": "+256",
         "email": "",
@@ -85,7 +89,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-#### Sample Response
+##### Sample Response Zone
 
 ```json
 {
@@ -98,13 +102,106 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
+
+#### 3.2 Sample delivery Request Range
+##### Post Request
+
+```json
+{
+    "action": "directRequestDeliveryRange",
+    "countryCode": "UG",
+    "vehicleType": "DELIVERY_MOTORBIKE",
+    "paymentMode": "POSTPAID_E_COMMERCE_PARTNER",
+    "pickupContactInfo": {
+        "fullName": "Liquor Barr 21",
+        "phoneNumber": "+256712345678",
+        "countryCode": "256",
+        "email": "WD",
+        "gender": null,
+        "description": null,
+        "addressLatLng": "[0.32676, 32.58026]",
+        "addressLabel": "Kampala",
+        "city": "Kampala",
+        "building": null,
+        "plotNumber": null
+    },
+    "dropOffContactInfo": {
+        "fullName": "John Mugabe",
+        "phoneNumber": "+256723456789",
+        "countryCode": "256",
+        "email": null,
+        "gender": null,
+        "description": null,
+        "addressLatLng": "[0.31516919991087, 32.58163130000001]",
+        "addressLabel": "5B Speke Road, Kampala, Uganda",
+        "city": "Kampala",
+        "building": null,
+        "plotNumber": null
+    },
+    "packageDetails": {
+        "packageWeightKg": 1.0,
+        "packageHeightCm": 15.7,
+        "packageWidthCm": 4.3,
+        "packageTotalCost": 68800.0,
+        "itemLabel": "Johnnie Walker Red Label",
+        "itemDescription": "Crafted from the four corners of Scotland, it crackles with spice and is bursting with vibrant, smoky flavours – followed by a mellow bed of vanilla, a fresh zestiness and the Johnnie Walker signature of a long, lingering, smoky finish.",
+        "itemColor": null,
+        "itemImageUrl": "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbXdGIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9d3b5390a7b89263e2caec17eda0706bfbc24b26/JW%20Red%20250ml.png",
+        "itemQuantity": 2
+    },
+    "packagesMultiple" : [{
+        "packageWeightKg": 1.0,
+        "packageHeightCm": 12.7,
+        "packageWidthCm": 4.7,
+        "packageTotalCost": 72800.0,
+        "itemLabel": "Dimple 15 Year Old Blended Scotch Whisky",
+        "itemDescription": "Dimple offers an inviting flavour from 15 Years Old Supreme Quality Malt and Grain Whiskies which result in a delightful, smooth flavoured whisky with notes of mango, mocha and mixed nuts.",
+        "itemColor": null,
+        "itemImageUrl": "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBaE1FIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--d262e837ca2745cda1d9343b7eb8b1963b31ad45/John%20Walker%20&%20Sons%20Odyssey.png",
+        "itemQuantity": 1
+    },{
+        "packageWeightKg" : 1.4,
+        "packageHeightCm" : 10,
+        "packageWidthCm" : 5,
+        "packageLenghtCm" :2.1,
+        "packageTotalCost" : 7000,
+        "itemLabel" : "Alvaro Pineapple",
+        "itemDescription" : "A unique refreshing non alcoholic natural malt drink",
+        "itemColor" : "GREEN",
+        "itemImageUrl" : "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBanNDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0b274bc24be974aff726b9d332dfb183ffc88bbf/Alvaro-20Pineapple.png",
+        "itemQuantity" : 1
+    }],
+    "pickupCheckList" : ["Plastic cups added","The item is new",".."],
+    "orderId":"U1234",
+    "suborderID":"U5678",
+    "DeliveryOption":"STANDARD",
+    "returnDelivery":false,
+    "returnItemReason":null,
+    "returnOriginalRequestIdHash":null,
+    "orderPlacedDateTimeMills":"12345678"
+```
+
+##### Sample Response Zone
+```json
+{
+  "estimatedDistance": 6.290088835583491,
+  "estimatedDuration": 29.21120981731499,
+  "estimatedFee": 8155.734773947344,
+  "requestID": "38fa6ce0525cb...3be0183cc2f5ca73",
+  "currency": "UGX",
+  "message": "Delivery request sent"
+}
+```
+
+
+
 ### Price Estimation
 
 #### Parameters
 
 | Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
 | :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| action      | string | REQUIRED | directRequestDelivery                                                                                                                                                                                                                       |
+| action      | string | REQUIRED | directRequestDelivery, directRequestDeliveryRange                                                                                                                                                                                                                       |
 | privateKey  | string | REQUIRED | Basic authentication Key obtained from the dashboard credentials inserted in the Header i.e.<br/>`Authorization: 'Bearer ' + privateKey `                                                                                                   |
 | countryCode | string | REQUIRED | Country code Name i.e `UG, KE, TZ` etc                                                                                                                                                                                                      |
 | vehicleType | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK` |
