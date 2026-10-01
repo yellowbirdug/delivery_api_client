@@ -2,13 +2,71 @@
 
 Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
 
-## Usage
-
+# Usage
 The following examples show how to consume different api actions
 
-## Delivery Request
+# YellowBIRD Delivery API Client
 
-### 1. Parameters
+Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
+
+## Table of Contents
+* [1. Delivery Request](#1-delivery-request)
+  * [1.1 Parameters](#11-parameters)
+  * [1.2 Payment Modes](#12-payment-modes)
+  * [1.3 Sample Requests & Responses](#13-sample-requests--responses)
+* [2. Price Estimation](#2-price-estimation)
+* [3. Nearest Driver Distance](#3-nearest-driver-distance)
+* [4. Current Request Status](#4-current-request-status)
+* [5. Current Driver Location](#5-current-driver-location)
+* [6. Request Cancellation](#6-request-cancellation)
+
+---
+
+## 2. Price Estimation
+### 2.1 Parameters (Price estimation)
+
+| Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
+| :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| action      | string | REQUIRED | directRequestDelivery, directRequestDeliveryRange                                                                                                                                                                                                                       |
+| privateKey  | string | REQUIRED | Basic authentication Key obtained from the dashboard credentials inserted in the Header i.e.<br/>`Authorization: 'Bearer ' + privateKey `                                                                                                   |
+| countryCode | string | REQUIRED | Country code Name i.e `UG, KE, TZ` etc                                                                                                                                                                                                      |
+| vehicleType | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK` |
+| origin      | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
+| destination | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
+### 2.2 Sample post reequest (Price estimation)
+```js
+let config = {
+    headers: {
+        Authorization: 'Bearer ' + privateKey
+    }
+}
+
+let data = {
+    "action": "estimateDeliveryFeesAndTime",
+    "countryCode": "UG",
+    "vehicleType": "DELIVERY_CAB",
+    "origin": "[0.29, 32.62]",
+    "destination": "[0.33, 32.58]"
+}
+axios.post('https://logistic.groupngs.com/api/', data, config)
+.then(...)
+.catch(...)
+```
+
+### 2.3 Sample Response (Price estimation)
+
+```json
+{
+  "estimatedDistance": 6.290088835583491,
+  "estimatedDuration": 29.21120981731499,
+  "currency": "UGX",
+  "estimatedFee": 8155.734773947344,
+  "message": "OK"
+}
+```
+
+## 3. Delivery Request
+### 3.1. Parameters
 
 | Parameter            | Type   | Status   | Description                                                                                                                                                                                                                                                                                                                                                   |
 | :------------------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -23,27 +81,8 @@ The following examples show how to consume different api actions
 | dropOffContactInfo   | object | REQUIRED | Details of the receiver i.e.<br/>`{fullName: String (REQUIRED), phoneNumber: String (REQUIRED), email: String (OPTIONAL), gender: String (OPTIONAL), description: String (OPTIONAL), addressLatLng: Array (REQUIRED) i.e. [lat, long], addressLabel: String (REQUIRED), city: String (OPTIONAL), building: String (OPTIONAL), plotNumber: String (OPTIONAL)}` |
 | paymentMode          | string | REQUIRED | Mode of payment , see Payment Modes for details                                                                                                                                                                                                                                                                                                               |
 
-### 2. Payement Modes
-
-| Mode                        | Description                 |
-| :-------------------------- | :-------------------------- |
-| CASH                        | CASH                        |
-| MOBILE_MONEY                | MOBILE MONEY                |
-| BANK_TRANSFER               | BANK TRANSFER               |
-| CREDIT_CARD                 | CREDIT CARD                 |
-| CASH_BY_SENDER              | CASH BY SENDER              |
-| CASH_BY_RECIPIENT           | CASH BY RECEIVER            |
-| CASH_ON_DELIVERY            | CASH ON DELIVERY            |
-| YELLOW_PAY                  | YELLOW PAY                  |
-| MOBILE_WALLET               | MOBILE WALLET               |
-| BUSINESS_ACCOUNT            | BUSINESS ACCOUNT            |
-| AUTO_RECOVERY               | AUTO RECOVERY               |
-| POSTPAID_E_COMMERCE_PARTNER | POSTPAID E COMMERCE PARTNER |
-| PREPAID_E_COMMERCE_PARTNER  | PREPAID E COMMERCE PARTNER  |
-
-### 3. Sample delivery Request
-#### 3.1 Sample delivery Request (Distance Range)
-##### Post Request
+### 3.2 Sample delivery Request (Distance Range)
+#### 3.2.1 Post Request
 ```json
 {
     "action": "directRequestDeliveryRange",
@@ -120,7 +159,7 @@ The following examples show how to consume different api actions
 }
 ```
 
-##### Sample Response (Distance Range)
+#### 3.2.2 Sample Response (Distance Range)
 ```json
 {
     "env": "UAT",
@@ -146,87 +185,9 @@ The following examples show how to consume different api actions
     "message": "Ok"
 }
 ```
-#### 3.1 Sample delivery Request Zone based
 
-##### Post Request
-```js
-let config = {
-    headers: {
-        Authorization: 'Bearer ' + privateKey
-    }
-}
-
-let data = {
-    "action": "**directRequestDeliveryZone**",
-    //... Same as previous 
-}
-axios.post('https://logistic.groupngs.com/api/', data, config)
-.then(...)
-.catch(...)
-```
-
-##### Sample Response Zone
-
-```json
-{
-  "estimatedDistance": 6.290088835583491,
-  "estimatedDuration": 29.21120981731499,
-  "estimatedFee": 8155.734773947344,
-  "requestID": "38fa6ce0525cb...3be0183cc2f5ca73",
-  "currency": "UGX",
-  "message": "Delivery request sent"
-}
-```
-
-
-
-### Price Estimation
-
-#### Parameters
-
-| Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
-| :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| action      | string | REQUIRED | directRequestDelivery, directRequestDeliveryRange                                                                                                                                                                                                                       |
-| privateKey  | string | REQUIRED | Basic authentication Key obtained from the dashboard credentials inserted in the Header i.e.<br/>`Authorization: 'Bearer ' + privateKey `                                                                                                   |
-| countryCode | string | REQUIRED | Country code Name i.e `UG, KE, TZ` etc                                                                                                                                                                                                      |
-| vehicleType | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK` |
-| origin      | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
-| destination | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
-
-```js
-let config = {
-    headers: {
-        Authorization: 'Bearer ' + privateKey
-    }
-}
-
-let data = {
-    "action": "estimateDeliveryFeesAndTime",
-    "countryCode": "UG",
-    "vehicleType": "DELIVERY_CAB",
-    "origin": "[0.29, 32.62]",
-    "destination": "[0.33, 32.58]"
-}
-axios.post('https://logistic.groupngs.com/api/', data, config)
-.then(...)
-.catch(...)
-```
-
-#### Sample Response
-
-```json
-{
-  "estimatedDistance": 6.290088835583491,
-  "estimatedDuration": 29.21120981731499,
-  "currency": "UGX",
-  "estimatedFee": 8155.734773947344,
-  "message": "OK"
-}
-```
-
-### Nearest Driver Distance
-
-#### Parameters
+## 4. Nearest Driver Distance
+### 4.1 Parameters
 
 | Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
 | :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -254,7 +215,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-#### Sample Response
+### 4.2 Sample Response
 
 ```json
 {
@@ -262,9 +223,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-### Current Request Status
+## 5. Current Request Status
 
-#### Parameters
+### 5.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -288,7 +249,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-#### Sample Request Statuses
+### 5.2 Sample Request Statuses
 
 ##### Common
 
@@ -340,9 +301,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | RATING_DONE_CLIENT        | RATING DONE CLIENT        |
 | RATING_DONE_FREELANCER    | RATING DONE FREELANCER    |
 
-### Current Driver Location
+## 6. Current Driver Location
 
-#### Parameters
+### 6.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -366,7 +327,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-#### Sample Response
+### 6.2 Sample Response
 
 ```json
 {
@@ -383,9 +344,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 
 
 
-### Request Cancellation 
+## 7. Request Cancellation 
 
-#### Parameters
+### 7.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -410,7 +371,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-#### Sample Response
+### 7.2 Sample Response
 
 ```json
 {
@@ -427,5 +388,24 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 ```
 Please note the request can only be cancelled via this api if the Item has been picked up yet. Otherwise, the cancellation will be performed upon request by YellowBIRD
 
+
+
+# Payement Modes
+
+| Mode                        | Description                 |
+| :-------------------------- | :-------------------------- |
+| CASH                        | CASH                        |
+| MOBILE_MONEY                | MOBILE MONEY                |
+| BANK_TRANSFER               | BANK TRANSFER               |
+| CREDIT_CARD                 | CREDIT CARD                 |
+| CASH_BY_SENDER              | CASH BY SENDER              |
+| CASH_BY_RECIPIENT           | CASH BY RECEIVER            |
+| CASH_ON_DELIVERY            | CASH ON DELIVERY            |
+| YELLOW_PAY                  | YELLOW PAY                  |
+| MOBILE_WALLET               | MOBILE WALLET               |
+| BUSINESS_ACCOUNT            | BUSINESS ACCOUNT            |
+| AUTO_RECOVERY               | AUTO RECOVERY               |
+| POSTPAID_E_COMMERCE_PARTNER | POSTPAID E COMMERCE PARTNER |
+| PREPAID_E_COMMERCE_PARTNER  | PREPAID E COMMERCE PARTNER  |
 
 
