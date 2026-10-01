@@ -1,30 +1,60 @@
-# YellowBIRD Delivery API Client
+# YellowBIRD Delivery API
 
-Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
+Before using the API, [sign up](https://logistic.groupngs.com) to obtain an API Key (Private Key). The Private Key is used for authorization.
 
+## Authentication
 
-Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
+Include the Private Key in the request header:
+
+```http
+Authorization: Bearer <privateKey>
+```
+
+**API endpoint used in the examples:**
+
+```text
+https://logistic.groupngs.com/api/
+```
 
 ## Table of Contents
-* [1. Delivery Request](#1-delivery-request)
-  * [1.1 Parameters](#11-parameters)
-  * [1.2 Payment Modes](#12-payment-modes)
-  * [1.3 Sample Requests & Responses](#13-sample-requests--responses)
-* [2. Price Estimation](#2-price-estimation)
-* [3. Nearest Driver Distance](#3-nearest-driver-distance)
-* [4. Current Request Status](#4-current-request-status)
-* [5. Current Driver Location](#5-current-driver-location)
-* [6. Request Cancellation](#6-request-cancellation)
+
+- [Authentication](#authentication)
+- [Usage](#usage)
+- [1. Price Estimation](#1-price-estimation)
+  - [1.1 Parameters](#11-parameters)
+  - [1.2 Sample Request](#12-sample-request)
+  - [1.3 Sample Response](#13-sample-response)
+- [2. Delivery Request](#2-delivery-request)
+  - [2.1 Parameters](#21-parameters)
+  - [2.2 Sample Delivery Request (Distance Range)](#22-sample-delivery-request-distance-range)
+    - [2.2.1 Request](#221-request)
+    - [2.2.2 Response](#222-response)
+- [3. Nearest Driver Distance](#3-nearest-driver-distance)
+  - [3.1 Parameters](#31-parameters)
+  - [3.2 Sample Response](#32-sample-response)
+- [4. Current Request Status](#4-current-request-status)
+  - [4.1 Parameters](#41-parameters)
+  - [4.2 Request Statuses](#42-request-statuses)
+    - [Common](#common)
+    - [Delivery Statuses](#delivery-statuses)
+    - [Cancellation Statuses](#cancellation-statuses)
+    - [Other Statuses](#other-statuses)
+- [5. Current Driver Location](#5-current-driver-location)
+  - [5.1 Parameters](#51-parameters)
+  - [5.2 Sample Response](#52-sample-response)
+- [6. Request Cancellation](#6-request-cancellation)
+  - [6.1 Parameters](#61-parameters)
+  - [6.2 Sample Response](#62-sample-response)
+- [7. Payment Modes](#7-payment-modes)
 
 ---
 
+## Usage
 
-# Usage
-The following examples show how to consume different api actions
+The following examples show how to consume different API actions
 
-
-## 2. Price Estimation
-### 2.1 Parameters (Price estimation)
+## 1. Price Estimation
+### 1.1 Parameters
 
 | Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
 | :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -34,27 +64,50 @@ The following examples show how to consume different api actions
 | vehicleType | string | REQUIRED | The type of carrier to take the package i.e. `DELIVERY_BIKE, DELIVERY_10_20_TON_TRUCK, DELIVERY_3_TON_TRUCK, DELIVERY_5_10_TON_TRUCK, DELIVERY_BIKE_BOX, DELIVERY_CAB, DELIVERY_PICKUP_TRUCK, DELIVERY_PICKUP_TRUCK_OPENED, DELIVERY_TRUCK` |
 | origin      | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
 | destination | array  | REQUIRED | Latitude and Longitude i.e. `[lat, lng]`                                                                                                                                                                                                    |
-### 2.2 Sample post reequest (Price estimation)
+### 1.2 Sample Request
 ```js
 let config = {
     headers: {
         Authorization: 'Bearer ' + privateKey
     }
 }
-
 let data = {
-    "action": "estimateDeliveryFeesAndTime",
+    "action": "estimateDeliveryFeesRange",
     "countryCode": "UG",
-    "vehicleType": "DELIVERY_CAB",
-    "origin": "[0.29, 32.62]",
-    "destination": "[0.33, 32.58]"
+    "orderId":"123455",
+    "origin": "[0.3184833930051751, 32.62019266226217]",
+    "destination": "[0.31934915908063444, 32.61512999584997]",
+    "deliveryOption" : "STANDARD",
+    "packageDetails" :{
+        "packageWeightKg" : 1.2,
+        "packageHeightCm" : 13.7,
+        "packageWidthCm" : 17.1,
+        "packageLenghtCm" : 27.1,
+        "packageTotalCost" : 6356000,
+        "itemQuantity" : 2
+    },
+    "packagesMultiple" : [{
+        "packageWeightKg" : 1.6,
+        "packageHeightCm" : 9,
+        "packageWidthCm" : 11,
+        "packageLenghtCm" : 25,
+        "packageTotalCost" : 2339000,
+        "itemQuantity" : 1
+    },{
+        "packageWeightKg" : 0.4,
+        "packageHeightCm" : 10,
+        "packageWidthCm" : 5,
+        "packageLenghtCm" : 15,
+        "packageTotalCost" : 57000,
+        "itemQuantity" : 2
+    }]
 }
 axios.post('https://logistic.groupngs.com/api/', data, config)
 .then(...)
 .catch(...)
 ```
 
-### 2.3 Sample Response (Price estimation)
+### 1.3 Sample Response
 
 ```json
 {
@@ -66,8 +119,8 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-## 3. Delivery Request
-### 3.1. Parameters
+## 2. Delivery Request
+### 2.1 Parameters
 
 | Parameter            | Type   | Status   | Description                                                                                                                                                                                                                                                                                                                                                   |
 | :------------------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -80,10 +133,10 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | packageDescription   | string | OPTIONAL | Description of the package                                                                                                                                                                                                                                                                                                                                    |
 | pickupContactInfo    | object | REQUIRED | Details of the sender i.e.<br/> `{fullName: String (REQUIRED), phoneNumber: String (REQUIRED), email: String (OPTIONAL), gender: String (OPTIONAL), description: String (OPTIONAL), addressLatLng: Array (REQUIRED) i.e. [lat, long], addressLabel: String (REQUIRED), city: String (OPTIONAL), building: String (OPTIONAL), plotNumber: String (OPTIONAL)}`  |
 | dropOffContactInfo   | object | REQUIRED | Details of the receiver i.e.<br/>`{fullName: String (REQUIRED), phoneNumber: String (REQUIRED), email: String (OPTIONAL), gender: String (OPTIONAL), description: String (OPTIONAL), addressLatLng: Array (REQUIRED) i.e. [lat, long], addressLabel: String (REQUIRED), city: String (OPTIONAL), building: String (OPTIONAL), plotNumber: String (OPTIONAL)}` |
-| paymentMode          | string | REQUIRED | Mode of payment , see Payment Modes for details                                                                                                                                                                                                                                                                                                               |
+| paymentMode          | string | REQUIRED | Mode of payment, see Payment Modes for details                                                                                                                                                                                                                                                                                                               |
 
-### 3.2 Sample delivery Request (Distance Range)
-#### 3.2.1 Post Request
+### 2.2 Sample Delivery Request (Distance Range)
+#### 2.2.1 Request
 ```json
 {
     "action": "directRequestDeliveryRange",
@@ -160,7 +213,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-#### 3.2.2 Sample Response (Distance Range)
+#### 2.2.2 Response
 ```json
 {
     "env": "UAT",
@@ -187,8 +240,8 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-## 4. Nearest Driver Distance
-### 4.1 Parameters
+## 3. Nearest Driver Distance
+### 3.1 Parameters
 
 | Parameter   | Type   | Status   | Description                                                                                                                                                                                                                                 |
 | :---------- | :----- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -216,7 +269,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-### 4.2 Sample Response
+### 3.2 Sample Response
 
 ```json
 {
@@ -224,9 +277,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-## 5. Current Request Status
+## 4. Current Request Status
 
-### 5.1 Parameters
+### 4.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -250,9 +303,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-### 5.2 Sample Request Statuses
+### 4.2 Request Statuses
 
-##### Common
+#### Common
 
 | Status                       | Description                   |
 | :--------------------------- | :---------------------------- |
@@ -270,7 +323,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | PAYMENT_CONFIRMATION         | PAYMENT RECEIVED FROM CLIENT  |
 | NO_DRIVER_FOUND              | NO DRIVER FOUND AT THE MOMENT |
 
-##### Specific to deliveries
+#### Delivery Statuses
 
 | Status                        | Description                            |
 | :---------------------------- | :------------------------------------- |
@@ -280,7 +333,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | DRIVER_ARRIVED_AT_DROP_OFF    | DRIVER ARRIVED AT DROP OFF LOCATION    |
 | ORDER_DELIVERED               | ORDER DELIVERED TO CUSTOMERS           |
 
-##### Cancellations
+#### Cancellation Statuses
 
 | Status                           | Description                      |
 | :------------------------------- | :------------------------------- |
@@ -292,7 +345,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | REQUEST_DELETED_BY_DRIVER        | REQUEST DELETED BY DRIVER        |
 | CLIENT_CANCELED_ACCEPTED_REQUEST | REQUEST CANCELLED BY CLIENT VIA API|
 
-##### Others
+#### Other Statuses
 
 | Status                    | Description               |
 | :------------------------ | :------------------------ |
@@ -302,9 +355,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 | RATING_DONE_CLIENT        | RATING DONE CLIENT        |
 | RATING_DONE_FREELANCER    | RATING DONE FREELANCER    |
 
-## 6. Current Driver Location
+## 5. Current Driver Location
 
-### 6.1 Parameters
+### 5.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -328,7 +381,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-### 6.2 Sample Response
+### 5.2 Sample Response
 
 ```json
 {
@@ -343,11 +396,9 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
+## 6. Request Cancellation
 
-
-## 7. Request Cancellation 
-
-### 7.1 Parameters
+### 6.1 Parameters
 
 | Parameter  | Type   | Status   | Description                                                                                                                               |
 | :--------- | :----- | :------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -372,7 +423,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 .catch(...)
 ```
 
-### 7.2 Sample Response
+### 6.2 Sample Response
 
 ```json
 {
@@ -389,9 +440,7 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 ```
 Please note the request can only be cancelled via this api if the Item has been picked up yet. Otherwise, the cancellation will be performed upon request by YellowBIRD
 
-
-
-# Payement Modes
+## 7. Payment Modes
 
 | Mode                        | Description                 |
 | :-------------------------- | :-------------------------- |
@@ -408,5 +457,3 @@ Please note the request can only be cancelled via this api if the Item has been 
 | AUTO_RECOVERY               | AUTO RECOVERY               |
 | POSTPAID_E_COMMERCE_PARTNER | POSTPAID E COMMERCE PARTNER |
 | PREPAID_E_COMMERCE_PARTNER  | PREPAID E COMMERCE PARTNER  |
-
-
