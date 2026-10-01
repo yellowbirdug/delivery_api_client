@@ -42,70 +42,8 @@ The following examples show how to consume different api actions
 | PREPAID_E_COMMERCE_PARTNER  | PREPAID E COMMERCE PARTNER  |
 
 ### 3. Sample delivery Request
-#### 3.1 Sample delivery Request Zone
-
+#### 3.1 Sample delivery Request (Distance Range)
 ##### Post Request
-```js
-let config = {
-    headers: {
-        Authorization: 'Bearer ' + privateKey
-    }
-}
-
-let data = {
-    "action": "directRequestDelivery",
-    "countryCode": "UG",
-    "vehicleType": "DELIVERY_CAB",
-    "paymentMode": "CASH",
-    "pickupContactInfo": {
-        "fullName": "Isaac Stores",
-        "phoneNumber": "77900000",
-        "countryCode": "+256",
-        "email": "isaacopiow@email.com",
-        "gender": "",
-        "description": "String (OPTIONAL)",
-        "addressLatLng": "[0.29, 32.62]",
-        "addressLabel": "Acacia Mall",
-        "city": "Kampala",
-        "building": "String (OPTIONAL)",
-        "plotNumber": "String (OPTIONAL)"
-    },
-    "dropOffContactInfo": {
-        "fullName": "Philip Akol",
-        "phoneNumber": "77900000",
-        "countryCode": "+256",
-        "email": "",
-        "gender": "",
-        "description": "String (OPTIONAL)",
-        "addressLatLng": "[0.33, 32.58]",
-        "addressLabel": "Unknown",
-        "city": "Kampala",
-        "building": "String (OPTIONAL)",
-        "plotNumber": "String (OPTIONAL)"
-    }
-}
-axios.post('https://logistic.groupngs.com/api/', data, config)
-.then(...)
-.catch(...)
-```
-
-##### Sample Response Zone
-
-```json
-{
-  "estimatedDistance": 6.290088835583491,
-  "estimatedDuration": 29.21120981731499,
-  "estimatedFee": 8155.734773947344,
-  "requestID": "38fa6ce0525cb...3be0183cc2f5ca73",
-  "currency": "UGX",
-  "message": "Delivery request sent"
-}
-```
-
-
-#### 3.2 Sample delivery Request Range
-##### Post Request
-
 ```json
 {
     "action": "directRequestDeliveryRange",
@@ -182,11 +120,11 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
 }
 ```
 
-##### Sample Response Range
+##### Sample Response (Distance Range)
 ```json
 {
     "env": "UAT",
-    "logisticsPricingLabel": "Distance Based Pricing intouch",
+    "logisticsPricingLabel": "Distance Based Pricing",
     "estimatedDistance": 1.8169571553861763,
     "estimatedDuration": 9.841851258341787,
     "estimatedFare": 3000,
@@ -206,6 +144,37 @@ axios.post('https://logistic.groupngs.com/api/', data, config)
     "countryCode": "UG",
     "returnDelivery": false,
     "message": "Ok"
+}
+```
+#### 3.1 Sample delivery Request Zone based
+
+##### Post Request
+```js
+let config = {
+    headers: {
+        Authorization: 'Bearer ' + privateKey
+    }
+}
+
+let data = {
+    "action": "**directRequestDeliveryZone**",
+    //... Same as previous 
+}
+axios.post('https://logistic.groupngs.com/api/', data, config)
+.then(...)
+.catch(...)
+```
+
+##### Sample Response Zone
+
+```json
+{
+  "estimatedDistance": 6.290088835583491,
+  "estimatedDuration": 29.21120981731499,
+  "estimatedFee": 8155.734773947344,
+  "requestID": "38fa6ce0525cb...3be0183cc2f5ca73",
+  "currency": "UGX",
+  "message": "Delivery request sent"
 }
 ```
 
