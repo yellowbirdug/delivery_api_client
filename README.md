@@ -2,10 +2,6 @@
 
 Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
 
-# Usage
-The following examples show how to consume different api actions
-
-# YellowBIRD Delivery API Client
 
 Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (Private Key) which will be used for Authorization.
 
@@ -21,6 +17,11 @@ Before usage, [sign up](https://logistic.groupngs.com) today to get an API Key (
 * [6. Request Cancellation](#6-request-cancellation)
 
 ---
+
+
+# Usage
+The following examples show how to consume different api actions
+
 
 ## 2. Price Estimation
 ### 2.1 Parameters (Price estimation)
