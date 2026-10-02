@@ -233,8 +233,8 @@ axios.post('https://logistics.groupngs.com/api/', data, config)
         "itemImageUrl" : "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBanNDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0b274bc24be974aff726b9d332dfb183ffc88bbf/Alvaro-20Pineapple.png",
         "itemQuantity" : 1
     }],
-    "itemPaymentMode": "PREPAID",
-    "deliveryPaymentMode": "POSTPAID",
+    "itemPaymentMode": "CASH_ON_DELIVERY",
+    "deliveryPaymentMode": "CASH_ON_DELIVERY",
     "deliveryFeeFromPartner": null, //This is in case the partner may want to charge a different delivery fee to the customer. (From the driver App)
     "pickupCheckList" : ["Plastic cups added","The item is new",".."],
     "orderId":"U1234",
