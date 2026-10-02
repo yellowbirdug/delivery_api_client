@@ -233,6 +233,9 @@ axios.post('https://logistics.groupngs.com/api/', data, config)
         "itemImageUrl" : "https://ke-thebar-business.agiza.io/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBanNDIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--0b274bc24be974aff726b9d332dfb183ffc88bbf/Alvaro-20Pineapple.png",
         "itemQuantity" : 1
     }],
+    "itemPaymentMode": "PREPAID",
+    "deliveryPaymentMode": "POSTPAID",
+    "deliveryFeeFromPartner": null, //This is in case the partner may want to charge a different delivery fee to the customer. (From the driver App)
     "pickupCheckList" : ["Plastic cups added","The item is new",".."],
     "orderId":"U1234",
     "suborderID":"U5678",
@@ -471,7 +474,7 @@ axios.post('https://logistics.groupngs.com/api/', data, config)
 ```
 Please note the request can only be cancelled via this api if the Item has been picked up yet. Otherwise, the cancellation will be performed upon request by YellowBIRD
 
-## 7. Payment Modes
+## 7.Delivery Payment Modes
 
 | Mode                        | Description                 |
 | :-------------------------- | :-------------------------- |
